@@ -3,7 +3,6 @@
 // icon-color: orange; icon-glyph: magic;
 
 let $ = importModule('core');
-console.log($)
 let url_app_icon =
   'https://app.sharesies.nz/s/i/pineapple-ios-icon-2a9b888e06d04ee1e106b06dbee5ca8c.png';
 let url_login = 'https://app.sharesies.nz/api/identity/login';
