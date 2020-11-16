@@ -27,7 +27,7 @@ async function main() {
 
   let node = $.html`
     <ListWidget padding=${[4,10,4,10]} backgroundColor=${'#121212'} >
-      <Text init="Epic 喜加一" ...${textProps}/>
+      <Text init="Epic free games" ...${textProps}/>
       <Spacer/>
       <Stack -centerAlignContent>
         ${games.map(
