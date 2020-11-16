@@ -2,7 +2,6 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic;
 
-let $ = importModule('core');
 let url_app_icon =
   'https://app.sharesies.nz/s/i/pineapple-ios-icon-2a9b888e06d04ee1e106b06dbee5ca8c.png';
 let url_login = 'https://app.sharesies.nz/api/identity/login';
@@ -12,6 +11,7 @@ let color_text = '#fff7af';
 let color_text_sub = '#ffffff';
 let interval = 60; // min
 
+let $ = importModule('core');
 
 
 function parseArgs() {
@@ -62,10 +62,9 @@ async function createWidget(stats, name) {
     '-centerAlignText': [],
   };
 
-  let widget = $.w`
+  let nodes = $.parse`
   <ListWidget  ...${{
     backgroundColor: color_bg,
-    refreshAfterDate: new Date(Date.now() + 1000 * 60 * interval),
   }} >
     <Stack>
       <Image init=${appIcon} imageSize=${[24, 24]} cornerRadius=${4}/>
@@ -103,48 +102,26 @@ async function createWidget(stats, name) {
     }} />
     <Stack>
       <Spacer/>
-      <Text init="Last updated at "  font=${['systemFont',8]}  />
-      <Date init=${new Date()} font=${['systemFont',8]} -applyTimeStyle  />   
+      <Text init="Last updated at "  font=${['systemFont', 8]}  />
+      <Date init=${new Date()} font=${['systemFont', 8]} -applyTimeStyle  />   
       <Spacer/>
     </>
   </>
   `;
 
+  let widget = $.createWidget(nodes);
   return widget;
 }
 
-async function run() {
+async function main() {
   let [email, pwd] = parseArgs();
   if (!email || !pwd) {
     throw new Error('no email or password');
   }
   let { session, user_id, preferred_name } = await login(email, pwd);
-
   let stats = await get_stats(user_id, session);
-
   let widget = await createWidget(stats, preferred_name);
-
-  if (config.runsInWidget) {
-    await Script.setWidget(widget);
-  } else {
-    await widget.presentMedium();
-  }
-  Script.complete();
+  $.presentWidget(widget);
 }
 
-async function main() {
-  try {
-    await run();
-  } catch (err) {
-    let w = new ListWidget();
-    w.backgroundColor = new Color('#ef496f');
-    w.addText(err.toString());
-    if (config.runsInWidget) {
-      Script.setWidget(w);
-    } else {
-      w.presentMedium();
-    }
-  }
-}
-
-main();
+$.run(main);

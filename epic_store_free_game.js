@@ -2,7 +2,6 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: light-brown; icon-glyph: magic;
 
-let $ = importModule('core');
 let url_endpoint =
   'https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions';
 let url_icon =
@@ -14,6 +13,9 @@ let textProps = {
   '-centerAlignText': [],
 };
 
+
+let $ = importModule('core');
+
 async function main() {
   let r = new Request(url_endpoint);
   let data = await r.loadJSON();
@@ -23,15 +25,14 @@ async function main() {
     games.map((game) => $.loadImage(game.keyImages[1].url))
   );
 
-  console.log(games.map((g) => g.title));
 
-  let node = $.html`
-    <ListWidget padding=${[4,10,4,10]} backgroundColor=${'#121212'} >
+  let node = $.parse`
+    <ListWidget padding=${[4,10,4,10]} backgroundColor=${'#121212'} url="https://www.epicgames.com/store">
       <Text init="Epic free games" ...${textProps}/>
       <Spacer/>
       <Stack -centerAlignContent>
         ${games.map(
-          (game, i) => $.html`
+          (game, i) => $.parse`
               <Stack -layoutVertically -centerAlignContent  > 
                 <Stack>
                   <Spacer/>
@@ -63,13 +64,8 @@ async function main() {
     </>
 `;
 
-  let widget = $.c(node);
-  if (config.runsInWidget) {
-    await Script.setWidget(widget);
-  } else {
-    await widget.presentMedium();
-  }
-  Script.complete();
+  let widget = $.createWidget(node);
+  $.presentWidget(widget);
 }
 
-main();
+$.run(main)

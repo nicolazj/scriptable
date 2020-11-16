@@ -2,7 +2,7 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: light-brown; icon-glyph: magic;
 
-let $ = importModule('core');
+
 let url_endpoint = 'https://trade.itiger.com/portfolio/assets';
 let url_icon =
   'https://static.itiger.com/portal5/static/images/logo.152.abf5ec9c.png';
@@ -11,6 +11,8 @@ let textProps = {
   lineLimit: 1,
   '-centerAlignText': [],
 };
+
+let $ = importModule('core');
 
 async function main() {
   let auth = args.widgetParameter;
@@ -21,11 +23,9 @@ async function main() {
   };
   let data = await r.loadJSON();
   let { unrealizedPnl, totalTodayPnl, netLiquidation } = data.data.sec;
-
   let icon = await $.loadImage(url_icon);
 
-
-  let widget = $.w`
+  let node = $.parse`
     <ListWidget >
         <Image init=${icon} imageSize=${[24, 24]} cornerRadius=${4} -centerAlignImage/>
         <Spacer/>
@@ -50,14 +50,11 @@ async function main() {
           <Spacer/>
         </>
     </>
-`;
+  `;
+  let widget = $.createWidget(node);
 
-  if (config.runsInWidget) {
-    await Script.setWidget(widget);
-  } else {
-    await widget.presentMedium();
-  }
-  Script.complete();
+  $.presentWidget(widget);
+
 }
 
-main();
+$.run(main)
