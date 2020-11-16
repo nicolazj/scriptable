@@ -4,8 +4,10 @@
 
 let w = importModule('w');
 let r = importModule('r');
+let u = importModule('u');
 
 module.exports = {
   ...w,
   ...r,
+  ...u,
 };

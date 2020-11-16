@@ -6,15 +6,17 @@
 
 // icon-color: green; icon-glyph: magic;
 let htm = importModule('htm');
+
 function h(type, props, ...children) {
   return {
     type,
     props,
-    children,
+    // use .html inside .html would cause children double array.
+    children: children.flat(),
   };
 }
 
-const html = htm.bind(h);
+let html = htm.bind(h);
 
 function applyProps(comp, props = {}) {
   for (let prop in props) {
@@ -61,4 +63,4 @@ function w(...args) {
   return c(html(...args));
 }
 
-module.exports = { w };
+module.exports = { c, w, html };

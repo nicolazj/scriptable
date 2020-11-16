@@ -101,6 +101,12 @@ async function createWidget(stats, name) {
       textColor: color_text_sub,
       ...textProps,
     }} />
+    <Stack>
+      <Spacer/>
+      <Text init="Last updated at "  font=${['systemFont',8]}  />
+      <Date init=${new Date()} font=${['systemFont',8]} -applyTimeStyle  />   
+      <Spacer/>
+    </>
   </>
   `;
 

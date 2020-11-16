@@ -43,6 +43,12 @@ async function main() {
             <Text init="Today's P&L" font=caption2 ...${textProps}/>
           </>
         </>
+        <Stack>
+          <Spacer/>
+          <Text init="Last updated at "  font=${['systemFont',8]}  />
+          <Date init=${new Date()} font=${['systemFont',8]} -applyTimeStyle  />   
+          <Spacer/>
+        </>
     </>
 `;
 
